@@ -8,6 +8,7 @@ const auth = require('./middlewares/auth');
 const notFoundRoutes = require('./middlewares/not-found-routes');
 const { validationCreateUser, validationLogin } = require('./middlewares/validation-joi');
 const { requestLogger, errorLogger } = require('./middlewares/logger');
+const cors = require('./middlewares/cors');
 
 const { PORT = 3000 } = process.env;
 const app = express();
@@ -19,6 +20,8 @@ mongoose.connect('mongodb://localhost:27017/mestodb', {
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+
+app.use(cors);
 
 // логер запросов
 app.use(requestLogger);
