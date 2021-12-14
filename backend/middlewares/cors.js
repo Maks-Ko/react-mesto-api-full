@@ -1,13 +1,13 @@
-const allowedCors = [
+const allowedCorsDomains = [
   'https://mavko.mesto.nomoredomains.rocks',
   'http://mavko.mesto.nomoredomains.rocks',
   'localhost:3000',
 ];
 
-module.exports = (req, res, next) => {
+const allowedCors = (req, res, next) => {
   const { origin } = req.headers;
 
-  if (allowedCors.includes(origin)) {
+  if (allowedCorsDomains.includes(origin)) {
     res.header('Access-Control-Allow-Origin', origin);
   }
 
@@ -23,3 +23,5 @@ module.exports = (req, res, next) => {
 
   next();
 };
+
+module.exports = allowedCors;
