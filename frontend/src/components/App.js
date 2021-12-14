@@ -96,7 +96,7 @@ function App() {
   React.useEffect(() => {
     api.getItemsUser()
     .then((data) => {
-        setCurrentUser(data.date);
+        setCurrentUser(data.data);
     })
     .catch((err) => {
         console.log(err); // "Что-то пошло не так: ..."

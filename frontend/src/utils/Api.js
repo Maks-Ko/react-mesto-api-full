@@ -9,7 +9,7 @@ class Api {
 
     // получаем данные пользователя
     getItemsUser() {
-        return fetch(`${this._baseUrl}/users/me`, {
+        return fetch(`${this._baseUrl}/user/me`, {
             headers: { ...this._headers, Authorization: `Bearer ${localStorage.getItem('jwt')}` },
         })
         .then(this._checkResponse)
