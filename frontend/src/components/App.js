@@ -105,8 +105,7 @@ function App() {
 
   React.useEffect(() => {        
     api.getItemsCards()
-    .then((data) =>{    
-      console.log(data)       
+    .then((data) =>{
         setCards(data.data);
     })
     .catch((err) => {
@@ -185,7 +184,6 @@ function App() {
   function handleUpdateUser(props) {
     api.editProfile(props)
     .then((data) => {
-      console.log(data)
       setCurrentUser(data.data);
       closeAllPopups();     
     })
