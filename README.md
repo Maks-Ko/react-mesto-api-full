@@ -3,4 +3,6 @@
 
 Ссылка на сайт https://mavko.mesto.nomoredomains.rocks
 
-Публичный IP 51.250.31.48 логин maksim
+Домен сервера https://api.mavko.mesto.nomoredomains.rocks
+
+Публичный IP 51.250.31.48
