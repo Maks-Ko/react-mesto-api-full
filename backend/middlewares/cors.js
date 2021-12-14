@@ -1,6 +1,6 @@
 const allowedCors = [
-  'https://mavko.mesto.nomoredomains.rocks',
-  'http://mavko.mesto.nomoredomains.rocks',
+  'https://mavko.mesto.nomoredomains.rocks/',
+  'http://mavko.mesto.nomoredomains.rocks/',
   'localhost:3000',
 ];
 
