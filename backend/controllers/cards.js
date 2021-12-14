@@ -28,7 +28,7 @@ const deleteCardId = (req, res, next) => {
   Card.findById(req.params.cardId)
     .orFail(() => new PropertyError('NotFound', 'Объект не найден'))
     .then((card) => {
-      if (!(card.owner === req.user._id)) {
+      if (!card.owner.equals(req.user._id)) {
         throw new ForbiddenError('Запрещено, нет прав');
       } else {
         Card.findByIdAndRemove(req.params.cardId)
