@@ -1,6 +1,6 @@
 class ApiUser {
     constructor() {
-        this._baseUrl = 'https://auth.nomoreparties.co';
+        this._baseUrl = 'https://api.mavko.mesto.nomoredomains.rocks';
         this._headers = {
             'Accept': 'application/json',
             'Content-Type': 'application/json'
