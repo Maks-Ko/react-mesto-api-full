@@ -26,7 +26,7 @@ const getCards = (req, res, next) => {
 // удаляет карточку по id
 const deleteCardId = (req, res, next) => {
   Card.findById(req.params.cardId)
-    .orFail(() => new PropertyError('NotFound', 'Объект не найден'))
+    .orFail(() => new NotFoundError('Объект не найден'))
     .then((card) => {
       if (!card.owner.equals(req.user._id)) {
         throw new ForbiddenError('Запрещено, нет прав');
@@ -34,9 +34,6 @@ const deleteCardId = (req, res, next) => {
         Card.findByIdAndRemove(req.params.cardId)
           .then((cardDelete) => res.send({ data: cardDelete }))
           .catch((err) => {
-            if (err.name === 'ReferenceError') {
-              next(new NotFoundError('Объект не найден'));
-            }
             if (err.name === 'CastError') {
               next(new ValidationError('Переданы некорректные данные'));
             }

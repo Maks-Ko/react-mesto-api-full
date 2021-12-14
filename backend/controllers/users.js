@@ -57,12 +57,9 @@ const login = (req, res, next) => {
 // возвращает текущего пользователя или пользователя по id
 const getUser = (req, res, next) => {
   User.findById(req.params.userId || req.user._id)
-    .orFail(() => new PropertyError('NotFound', 'Объект не найден'))
+    .orFail(() => new NotFoundError('Объект не найден'))
     .then((user) => res.send({ data: user }))
     .catch((err) => {
-      if (err.name === 'ReferenceError') {
-        next(new NotFoundError('Объект не найден'));
-      }
       if (err.name === 'CastError') {
         next(new ValidationError('Переданы некорректные данные'));
       }
@@ -82,12 +79,9 @@ const updateUser = (req, res, next) => {
   const { name, about } = req.body;
 
   User.findByIdAndUpdate(req.user._id, { name, about }, { new: true })
-    .orFail(() => new PropertyError('NotFound', 'Объект не найден'))
+    .orFail(() => new NotFoundError('Объект не найден'))
     .then((user) => res.send({ data: user }))
     .catch((err) => {
-      if (err.name === 'ReferenceError') {
-        next(new NotFoundError('Объект не найден'));
-      }
       if (err.name === 'CastError') {
         next(new ValidationError('Переданы некорректные данные'));
       }
@@ -100,12 +94,9 @@ const updateAvatar = (req, res, next) => {
   const { avatar } = req.body;
 
   User.findByIdAndUpdate(req.user._id, { avatar }, { new: true })
-    .orFail(() => new PropertyError('NotFound', 'Объект не найден'))
+    .orFail(() => new NotFoundError('Объект не найден'))
     .then((user) => res.send({ data: user }))
     .catch((err) => {
-      if (err.name === 'ReferenceError') {
-        next(new NotFoundError('Объект не найден'));
-      }
       if (err.name === 'CastError') {
         next(new ValidationError('Переданы некорректные данные'));
       }
