@@ -1,8 +1,7 @@
 class Api {
     constructor() {
-        this._baseUrl = 'https://mesto.nomoreparties.co/v1/cohort-26';
+        this._baseUrl = 'https://api.mavko.mesto.nomoredomains.rocks';
         this._headers = {
-            authorization: 'd3e97d43-b7f6-462d-a435-bd7e94d9d5b6',
             'Content-Type': 'application/json'
           };
     }
