@@ -2,15 +2,15 @@ class Api {
     constructor() {
         this._baseUrl = 'https://api.mavko.mesto.nomoredomains.rocks';
         this._headers = {
+            'Content-Type': 'application/json',
             'Accept': 'application/json',
-            'Content-Type': 'application/json'
           };
     }
 
     // получаем данные пользователя
     getItemsUser() {
         return fetch(`${this._baseUrl}/users/me`, {
-            headers: this._headers
+            headers: { ...this._headers, Authorization: `Bearer ${localStorage.getItem('jwt')}` },
         })
         .then(this._checkResponse)
     }
@@ -18,7 +18,7 @@ class Api {
     // получаем данные карточек
     getItemsCards() {
         return fetch(`${this._baseUrl}/cards`, {
-            headers: this._headers
+            headers: { ...this._headers, Authorization: `Bearer ${localStorage.getItem('jwt')}` },
         })
         .then(this._checkResponse)
     }
@@ -31,7 +31,7 @@ class Api {
     editProfile(dataUser) {
         return fetch(`${this._baseUrl}/users/me`, {
             method: 'PATCH',
-            headers: this._headers,
+            headers: { ...this._headers, Authorization: `Bearer ${localStorage.getItem('jwt')}` },
             body: JSON.stringify({
                 name: dataUser.name,
                 about: dataUser.about
@@ -44,7 +44,7 @@ class Api {
     addCardForm(dataCard) {
         return fetch(`${this._baseUrl}/cards`, {
             method: 'POST',
-            headers: this._headers,
+            headers: { ...this._headers, Authorization: `Bearer ${localStorage.getItem('jwt')}` },
             body: JSON.stringify({
                 name: dataCard.name,
                 link: dataCard.link
@@ -57,16 +57,16 @@ class Api {
     deleteCardUser(idCard) {
         return fetch(`${this._baseUrl}/cards/${idCard}`, {
             method: 'DELETE',
-            headers: this._headers,
+            headers: { ...this._headers, Authorization: `Bearer ${localStorage.getItem('jwt')}` },
         })
         .then(this._checkResponse)
     }
 
     // добавление - удаление лайка карточки    
     toggleLikeCard(idCard, isLike) {
-        return fetch(`${this._baseUrl}/cards/likes/${idCard}`, {
+        return fetch(`${this._baseUrl}/cards/${idCard}/likes`, {
             method: isLike ? 'DELETE' : 'PUT',
-            headers: this._headers,
+            headers: { ...this._headers, Authorization: `Bearer ${localStorage.getItem('jwt')}` },
         })
         .then(this._checkResponse)
     }
@@ -75,7 +75,7 @@ class Api {
     editAvatar(dataAvatar) {
         return fetch(`${this._baseUrl}/users/me/avatar`, {
             method: 'PATCH',
-            headers: this._headers,
+            headers: { ...this._headers, Authorization: `Bearer ${localStorage.getItem('jwt')}` },
             body: JSON.stringify({
                 avatar: dataAvatar.avatar
               })

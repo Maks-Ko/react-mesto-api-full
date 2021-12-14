@@ -36,7 +36,7 @@ class ApiUser {
 
     // проверка валидности токена и получения email
     getToken ({ jwt }) {
-        return fetch (`${this._baseUrl}/users/me`, {
+        return fetch (`${this._baseUrl}/user/me`, {
             method: 'GET',
             headers: {
                 'Accept': 'application/json',

@@ -24,12 +24,9 @@ function App() {
   const [isLuck, setIsLuck] = React.useState('');
   const [selectedCard, setSelectedCard] = React.useState({ isOpen: false, name: '', link: ''});  
   const [currentUser, setCurrentUser] = React.useState({});
+  const [usereEmail, setUserEmail] = React.useState({ email: '' });
   const [cards, setCards] = React.useState([]);
   const [loggedIn, setLoggedIn] = React.useState(false);
-  const [userDate, setUserDate] = React.useState({
-    _id: '',
-    email: ''
-  });
   const history = useHistory();
 
   React.useEffect(() => {
@@ -51,11 +48,6 @@ function App() {
   function handleRegister({ email, password }) {
     apiUser.addUser({ email, password })
     .then((data) => {
-      const { _id, email } = data.data;
-      setUserDate({
-        _id,
-        email
-      });
       handleInfoTooltipPopup(true);
     })
     .catch((err) => {
@@ -66,12 +58,9 @@ function App() {
   
   function handleLogin({ email, password }) {
     apiUser.enterUser({ email, password })
-    .then((data) => {
-      localStorage.setItem('jwt', data.token);
-      setLoggedIn(true);
-      setUserDate({
-        email
-      });
+    .then((user) => {
+      localStorage.setItem('jwt', user.token);
+      setLoggedIn(true);      
     })
     .catch((err) => {
       console.log(err); // "Что-то пошло не так: ..."
@@ -83,12 +72,9 @@ function App() {
 
     if(jwt) {
       apiUser.getToken({ jwt })
-      .then((data) => { 
-        const { _id, email } = data.data;
-        setUserDate({
-          _id,
-          email
-        });
+      .then((user) => {
+        setUserEmail(user.data.email);
+        setCurrentUser(user.data);
         setLoggedIn(true);
       })
       .catch((err) => {
@@ -99,10 +85,6 @@ function App() {
 
   function handleLogout() {
     localStorage.removeItem('jwt');
-    setUserDate({
-      _id: '',
-      email: ''
-    });
     setLoggedIn(false);
   }
 
@@ -113,32 +95,33 @@ function App() {
 
   React.useEffect(() => {
     api.getItemsUser()
-    .then((date) => {
-        setCurrentUser(date);
+    .then((data) => {
+        setCurrentUser(data.date);
     })
     .catch((err) => {
         console.log(err); // "Что-то пошло не так: ..."
     });
-  }, []);
+  }, [loggedIn]);
 
   React.useEffect(() => {        
     api.getItemsCards()
-    .then((date) =>{            
-        setCards(date);
+    .then((data) =>{    
+      console.log(data)       
+        setCards(data.data);
     })
     .catch((err) => {
         console.log(err); // "Что-то пошло не так: ..."
     });
 
-  }, []);
+  }, [loggedIn]);
 
   function handleCardLike(card) {
     // Снова проверяем, есть ли уже лайк на этой карточке
-    const isLiked = card.likes.some(i => i._id === currentUser._id);    
+    const isLiked = card.likes.some((i) => i === currentUser._id);    
     // Отправляем запрос в API и получаем обновлённые данные карточки
     api.toggleLikeCard(card._id, isLiked)
     .then((newCard) => {
-      setCards((state) => state.map((c) => c._id === card._id ? newCard : c));
+      setCards((state) => state.map((c) => c._id === card._id ? newCard.data : c));
     })
     .catch((err) => {
       console.log(err); // "Что-то пошло не так: ..."
@@ -201,8 +184,9 @@ function App() {
 
   function handleUpdateUser(props) {
     api.editProfile(props)
-    .then((date) => {
-      setCurrentUser(date);
+    .then((data) => {
+      console.log(data)
+      setCurrentUser(data.data);
       closeAllPopups();     
     })
     .catch((err) => {
@@ -212,8 +196,8 @@ function App() {
 
   function handleUpdateAvatar(props) {
     api.editAvatar(props)
-    .then((date) => {
-      setCurrentUser(date);
+    .then((data) => {
+      setCurrentUser(data.data);
       closeAllPopups();     
     })
     .catch((err) => {
@@ -224,7 +208,7 @@ function App() {
   function handleAddPlaceSubmit(props) {
     api.addCardForm(props)
     .then((newCard) => {
-      setCards([newCard, ...cards]);
+      setCards([newCard.data, ...cards]);
       closeAllPopups();
     })
     .catch((err) => {
@@ -255,7 +239,7 @@ function App() {
             onCardLike = {handleCardLike}
             onCardDelete = {handleCardDelete}
             onLogout = {handleLogout}
-            userDate = {userDate.email}
+            userDate = {usereEmail}
           />
         </Switch>
         <Footer />        
